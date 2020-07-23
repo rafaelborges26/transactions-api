@@ -19,8 +19,13 @@ class CreateTransactionService {
 
     if(type !== 'outcome' && type !== 'income' ){
 
-      throw('The type should be income or outcome')
+      throw Error('The type should be income or outcome')
 
+    }
+
+    const balance = this.transactionsRepository.getBalance()
+    if(type === 'outcome' && value > balance.total ) {
+      throw Error('The value is biggest than total')
     }
 
     const transaction = this.transactionsRepository.create({
@@ -29,7 +34,6 @@ class CreateTransactionService {
       type
     })
     return transaction
-
   }
 }
 
